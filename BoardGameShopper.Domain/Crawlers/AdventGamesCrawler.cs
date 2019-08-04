@@ -31,8 +31,9 @@ namespace BoardGameShopper.Domain.Crawlers
             var name = gameNode.QuerySelector(".DataViewItemProductTitle>a")?.InnerText?.Trim();
             var priceNode = gameNode.QuerySelector(".DataViewItemOurPrice");
             var price = ConvertPrice(_priceRegex.Replace(priceNode?.InnerText ?? string.Empty, string.Empty));
-
-            return CreateGame(name, price ?? 0);
+            var imageNode = gameNode?.QuerySelector(".DataViewItemThumbnailImage>div>a>img");
+            var image = imageNode?.Attributes["data-src"]?.Value;
+            return CreateGame(name, price ?? 0, image);
         }
     }
 }

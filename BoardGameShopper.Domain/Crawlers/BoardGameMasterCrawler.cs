@@ -19,7 +19,7 @@ namespace BoardGameShopper.Domain.Crawlers
             _dataContext = dataContext;
         }
 
-        public List<Game> GetGames(int? maxPages = null)
+        public List<Game> GetGames(int? maxPages = null, bool trace = false)
         {
             var pages = maxPages ?? 999;
 

@@ -18,16 +18,7 @@ namespace BoardGameShopper.Website.Controllers
 
         public IActionResult Index()
         {
-            var model = new HomeViewModels.Index();
-            model.Games = dataContext.Games.OrderBy(x => x.CurrentPrice).Select(x => new HomeViewModels.Index.GameItem
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Price = x.CurrentPrice,
-                SiteName = x.Site.Name
-            });
-
-            return View(model);
+            return RedirectToAction("Index", "List");
         }
 
         public IActionResult Privacy()

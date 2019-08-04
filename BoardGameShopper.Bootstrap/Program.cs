@@ -28,29 +28,28 @@ namespace BoardGameShopper.Bootstrap
             serviceProvider = services.BuildServiceProvider();
 
             var watch = Stopwatch.StartNew();
-
-            var games = new GameologyCrawler(null).GetGames(1);
-            InsertGames(games);
-            //var games = new AdventGamesCrawler().GetGames(1);
-            //games = new BoardGameMasterCrawler().GetGames(1);
-            //InsertGames(conn, games);
-            //games = new GameologyCrawler().GetGames(1);
-            //InsertGames(conn, games);
-
-
-            watch.Stop();
-            var elapsedMs = watch.ElapsedMilliseconds;
-            Console.WriteLine("Done!");
-            //Console.ReadLine();
+            var optionsBuilder = new DbContextOptionsBuilder<DataContext>();
+            optionsBuilder.UseSqlServer(config.GetConnectionString("DefaultConnection"));
+            using (var dataContext = new DataContext(optionsBuilder.Options))
+            {
+                var games = new GameologyCrawler(dataContext).GetGames(2, true);
+                InsertGames(games, dataContext);
+                games = new AdventGamesCrawler(dataContext).GetGames(2, true);
+                InsertGames(games, dataContext);
+                //games = new BoardGameMasterCrawler(dataContext).GetGames(2, true);
+                //InsertGames(games, dataContext);
+                
+                watch.Stop();
+                var elapsedMs = watch.ElapsedMilliseconds;
+                Console.WriteLine($"Completed in {elapsedMs/1000} seconds");
+                //Console.ReadLine();
+            }
         }
 
-        private static void InsertGames(IEnumerable<Game> games)
+        private static void InsertGames(IEnumerable<Game> games, DataContext dataContext)
         {
-            using (var context = serviceProvider.GetService<DataContext>())
-            {
-                context.Games.AddRange(games);
-                context.SaveChanges();
-            }
+            dataContext.Games.AddRange(games);
+            dataContext.SaveChanges();
         }
     }
 }

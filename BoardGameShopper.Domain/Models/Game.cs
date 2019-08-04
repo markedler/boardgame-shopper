@@ -22,5 +22,9 @@ namespace BoardGameShopper.Domain.Models
 
         [ForeignKey(nameof(SiteId))]
         public Site Site { get; set; }
+
+        public string Image { get; set; }
+
+        public string Url { get; set; }
     }
 }

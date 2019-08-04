@@ -9,6 +9,6 @@ namespace BoardGameShopper.Domain
 {
     public interface ISiteCrawler
     {
-        List<Game> GetGames(int? maxPages = null);
+        List<Game> GetGames(int? maxPages = null, bool trace = false);
     }
 }

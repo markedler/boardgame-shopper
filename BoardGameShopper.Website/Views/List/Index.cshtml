@@ -1,0 +1,62 @@
+﻿@model ListViewModels.Index
+@using X.PagedList.Mvc.Core
+@using X.PagedList
+@using X.PagedList.Mvc.Common
+
+@{
+    ViewData["Title"] = "Game List";
+}
+
+<h1>Game List</h1>
+
+<div>
+    @Html.PagedListPager(Model.Games, page => Url.Action("Index", new { page = page }),
+        new PagedListRenderOptions
+        {
+            FunctionToDisplayEachPageNumber = page => ((page - 1) * Model.PageSize + 1).ToString() + "-" + (((page - 1) * Model.PageSize) + Model.PageSize).ToString(),
+            MaximumPageNumbersToDisplay = 5,
+            LiElementClasses = new string[] { "page-item" },
+            PageClasses = new string[] { "page-link" }
+        })
+</div>
+<div class="small text-muted">
+    Viewing page @Model.Page of @Model.TotalPages (@Model.TotalCount items total)
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Game</th>
+            <th>Store</th>
+            <th>Current Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var game in Model.Games)
+        {
+        <tr>
+            <td class="text-center">
+                @if (game.Image != null)
+                {
+                    <img src="@game.Image" style="max-height: 75px" />
+                }
+            </td>
+            <td>@game.Name</td>
+            <td style="white-space: nowrap">@game.SiteName</td>
+            <td style="white-space: nowrap">@game.Price</td>
+        </tr>
+        }
+    </tbody>
+</table>
+<div class="small text-muted">
+    Viewing page @Model.Page of @Model.TotalPages (@Model.TotalCount items total)
+</div>
+<div>
+    @Html.PagedListPager(Model.Games, page => Url.Action("Index", new { page = page }),
+        new PagedListRenderOptions
+        {
+            FunctionToDisplayEachPageNumber = page => ((page - 1) * Model.PageSize + 1).ToString() + "-" + (((page - 1) * Model.PageSize) + Model.PageSize).ToString(),
+            MaximumPageNumbersToDisplay = 5,
+            LiElementClasses = new string[] { "page-item" },
+            PageClasses = new string[] { "page-link" }
+        })
+</div>

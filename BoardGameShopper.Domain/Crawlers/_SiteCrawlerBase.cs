@@ -36,7 +36,7 @@ namespace BoardGameShopper.Domain.Crawlers
             _site = _dataContext.Sites.SingleOrDefault(x => x.UniqueCode == SiteCode);
         }
         
-        public List<Game> GetGames(int? maxPages = null)
+        public List<Game> GetGames(int? maxPages = null, bool trace = false)
         {
             var pages = maxPages ?? 999;
 
@@ -46,6 +46,8 @@ namespace BoardGameShopper.Domain.Crawlers
             {
                 for (var i = 1; i <= pages; i++)
                 {
+                    if (trace)
+                        Console.Write($"Querying page {i} for {_site.Name}...");
                     var url = string.Format(baseUrl, i);
 
                     var html = Web.Load(url);
@@ -58,6 +60,8 @@ namespace BoardGameShopper.Domain.Crawlers
                     {
                         games.Add(ExtractGameFromNode(gameNode));
                     }
+                    if (trace)
+                        Console.WriteLine("Done!");
                 }
             }
 
@@ -67,14 +71,16 @@ namespace BoardGameShopper.Domain.Crawlers
         public abstract List<HtmlNode> GetGameNodes(HtmlDocument html);
         public abstract Game ExtractGameFromNode(HtmlNode gameNode);
 
-        protected Game CreateGame(string name, double price)
+        protected Game CreateGame(string name, double price, string image = null, string url = null)
         {
             return new Game
             {
                 Id = Guid.NewGuid(),
                 Name = name,
                 CurrentPrice = price,
-                SiteId = _site.Id
+                SiteId = _site.Id,
+                Image = image,
+                Url = url
             };
         }
 
