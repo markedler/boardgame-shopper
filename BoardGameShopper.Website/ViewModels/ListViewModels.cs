@@ -20,6 +20,10 @@ namespace BoardGameShopper.Website.ViewModels
 
             public int TotalPages { get; set; }
 
+            public string Sort { get; set; }
+
+            public bool Desc { get; set; }
+
             public class GameItem
             {
                 public Guid Id { get; set; }
@@ -28,7 +32,7 @@ namespace BoardGameShopper.Website.ViewModels
 
                 public double Price { get; set; }
 
-                public string SiteName { get; set; }
+                public string Store { get; set; }
 
                 public string Image { get; set; }
 

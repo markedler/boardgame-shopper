@@ -17,7 +17,7 @@ namespace BoardGameShopper.Domain.Crawlers
         protected Regex _priceRegex = new Regex("[^0-9.]");
         
         public abstract string SiteCode { get; }
-        public abstract List<string> BaseUrls { get; }
+        public abstract Dictionary<string, string> BaseUrls { get; }
         protected HtmlWeb Web { get; }
         protected List<Game> Games { get; set; }
         
@@ -47,8 +47,8 @@ namespace BoardGameShopper.Domain.Crawlers
                 for (var i = 1; i <= pages; i++)
                 {
                     if (trace)
-                        Console.Write($"Querying page {i} for {_site.Name}...");
-                    var url = string.Format(baseUrl, i);
+                        Console.Write($"Querying page {i} for {_site.Name} ({baseUrl.Key})...");
+                    var url = string.Format(baseUrl.Value, i);
 
                     var html = Web.Load(url);
                     html.DisableServerSideCode = true;

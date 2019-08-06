@@ -19,11 +19,13 @@ namespace BoardGameShopper.Domain.Crawlers
         }
 
         public override string SiteCode => Constants.SiteCode.Gameology;
-        public override List<string> BaseUrls => new List<string>
+        public override Dictionary<string, string> BaseUrls => new Dictionary<string, string>
         {
-            "https://www.gameology.com.au/collections/board-game?_=pf&sort=title-ascending&page={0}",
-            "https://www.gameology.com.au/collections/living-card-games?_=pf&sort=title-ascending&page={0}",
+            ["Board Games"] = $"{RootUrl}/collections/board-game?_=pf&sort=title-ascending&page={0}",
+            ["Card Games"] = $"{RootUrl}/collections/living-card-games?_=pf&sort=title-ascending&page={0}",
         };
+
+        private string RootUrl = "https://www.gameology.com.au";
 
         public override List<HtmlNode> GetGameNodes(HtmlDocument html)
         {
@@ -37,7 +39,13 @@ namespace BoardGameShopper.Domain.Crawlers
             var price = ConvertPrice(_priceRegex.Replace(priceNode?.InnerText ?? string.Empty, string.Empty));
             var imageNode = gameNode?.QuerySelector(".product-grid-image>.product-grid-image--centered>img");
             var image = imageNode?.Attributes["src"]?.Value;
-            return CreateGame(name, price ?? 0, image);
+            var urlFragment = gameNode?.Attributes["href"]?.Value;
+
+            string url = null;
+            if (!string.IsNullOrWhiteSpace(urlFragment))
+                url = RootUrl + urlFragment;
+
+            return CreateGame(name, price ?? 0, image, url);
         }
     }
 }

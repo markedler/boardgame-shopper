@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using CommandLine;
 
 namespace BoardGameShopper.Bootstrap
 {
@@ -18,8 +19,18 @@ namespace BoardGameShopper.Bootstrap
     {
         public static ServiceProvider serviceProvider;
 
+        public class Options {
+            [Option('c', "clean", Required = false, HelpText = "Cleans the database before importing.")]
+            public bool Clean {get;set;}
+        }
+
         public static void Main(string[] args)
         {
+            var clean = false;
+            Parser.Default.ParseArguments<Options>(args).WithParsed<Options>(o => {
+                clean = o.Clean;
+            });
+            
             var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
             var services = new ServiceCollection();
@@ -30,8 +41,16 @@ namespace BoardGameShopper.Bootstrap
             var watch = Stopwatch.StartNew();
             var optionsBuilder = new DbContextOptionsBuilder<DataContext>();
             optionsBuilder.UseSqlServer(config.GetConnectionString("DefaultConnection"));
+
+
             using (var dataContext = new DataContext(optionsBuilder.Options))
             {
+                if (clean) {
+                    Console.WriteLine("Clearing existing games from database...");
+                    dataContext.Games.RemoveRange(dataContext.Games);
+                    dataContext.SaveChanges();
+                }
+
                 var games = new GameologyCrawler(dataContext).GetGames(2, true);
                 InsertGames(games, dataContext);
                 games = new AdventGamesCrawler(dataContext).GetGames(2, true);
