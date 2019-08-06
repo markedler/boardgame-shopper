@@ -19,6 +19,9 @@ namespace BoardGameShopper.Bootstrap
     {
         public static ServiceProvider serviceProvider;
 
+        private const int NumPages = 5;
+        private const bool Trace = true;
+
         public class Options {
             [Option('c', "clean", Required = false, HelpText = "Cleans the database before importing.")]
             public bool Clean {get;set;}
@@ -27,9 +30,9 @@ namespace BoardGameShopper.Bootstrap
         public static void Main(string[] args)
         {
             var clean = false;
-            Parser.Default.ParseArguments<Options>(args).WithParsed<Options>(o => {
-                clean = o.Clean;
-            });
+            //Parser.Default.ParseArguments<Options>(args).WithParsed<Options>(o => {
+            //    clean = o.Clean;
+            //});
             
             var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
@@ -51,13 +54,13 @@ namespace BoardGameShopper.Bootstrap
                     dataContext.SaveChanges();
                 }
 
-                var games = new GameologyCrawler(dataContext).GetGames(2, true);
+                var games = new GameologyCrawler(dataContext).GetGames(NumPages, Trace);
                 InsertGames(games, dataContext);
-                games = new AdventGamesCrawler(dataContext).GetGames(2, true);
+                games = new AdventGamesCrawler(dataContext).GetGames(NumPages, Trace);
                 InsertGames(games, dataContext);
-                //games = new BoardGameMasterCrawler(dataContext).GetGames(2, true);
+                //games = new BoardGameMasterCrawler(dataContext).GetGames(NumPages, Trace);
                 //InsertGames(games, dataContext);
-                
+
                 watch.Stop();
                 var elapsedMs = watch.ElapsedMilliseconds;
                 Console.WriteLine($"Completed in {elapsedMs/1000} seconds");

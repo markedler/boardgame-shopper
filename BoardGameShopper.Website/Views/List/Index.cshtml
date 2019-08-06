@@ -9,6 +9,15 @@
 
 <h1>Game List</h1>
 
+@using (Html.BeginForm())
+{
+    <div>
+        @Html.LabelFor(model => model.Search)
+        @Html.TextBoxFor(model => model.Search)
+    </div>
+}
+
+
 <div>
     @Html.PagedListPager(Model.Games, page => Url.Action("Index", new { page = page, sort = Model.Sort, desc = Model.Desc }),
         new PagedListRenderOptions
@@ -44,7 +53,9 @@
             <td class="text-center">
                 @if (game.Image != null)
                 {
-                    <img src="@game.Image" style="max-height: 75px" />
+                    <a href="@game.Url" target="_blank">
+                        <img src="@game.Image" style="max-height: 75px" />
+                    </a>
                 }
             </td>
             <td><a href="@game.Url" target="_blank">@game.Name</a></td>

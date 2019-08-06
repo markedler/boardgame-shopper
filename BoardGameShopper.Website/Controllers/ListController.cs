@@ -19,15 +19,21 @@ namespace BoardGameShopper.Website.Controllers
         {
         }
 
-        public async Task<IActionResult> Index(int page = 1, int pageSize = 30, string sort = "name", bool desc = false)
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 30, string sort = "name", bool desc = false, string search = null)
         {
             ViewData["NameSort"] = sort == "name" ? "name_desc": "name";
             ViewData["PriceSort"] = sort == "price" ? "price_desc": "price";
             ViewData["StoreSort"] = sort == "store" ? "store_desc": "store";
 
             var model = new ListViewModels.Index();
-            var query = dataContext.Games
-            .Select(x => new ListViewModels.Index.GameItem
+            var query = dataContext.Games.AsQueryable();
+
+            if (search != null)
+            {
+                query = query.Where(x => x.Name.Contains(search));
+            }
+
+            var games = query.Select(x => new ListViewModels.Index.GameItem
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -40,26 +46,26 @@ namespace BoardGameShopper.Website.Controllers
             var orderBy = string.Format("{0}_{1}", sort, desc ? "desc" : "asc");
             switch (orderBy) {
                 case "name_desc":
-                    query = query.OrderByDescending(x => x.Name);
+                    games = games.OrderByDescending(x => x.Name);
                     break;
                 case "price_asc":
-                    query = query.OrderBy(x => x.Price);
+                    games = games.OrderBy(x => x.Price);
                     break;
                 case "price_desc": 
-                    query = query.OrderByDescending(x => x.Price).ThenBy(x => x.Name);
+                    games = games.OrderByDescending(x => x.Price).ThenBy(x => x.Name);
                     break;
                 case "store_asc":
-                    query = query.OrderBy(x => x.Store).ThenBy(x => x.Name);
+                    games = games.OrderBy(x => x.Store).ThenBy(x => x.Name);
                     break;
                 case "store_desc": 
-                    query = query.OrderByDescending(x => x.Store).ThenBy(x => x.Name);
+                    games = games.OrderByDescending(x => x.Store).ThenBy(x => x.Name);
                     break;
                 default:
-                    query = query.OrderBy(x => x.Name);
+                    games = games.OrderBy(x => x.Name);
                     break;
             } 
 
-            model.Games = await query.ToPagedListAsync(page, pageSize);
+            model.Games = await games.ToPagedListAsync(page, pageSize);
 
             model.PageSize = pageSize;
             model.Page = page;
@@ -67,6 +73,7 @@ namespace BoardGameShopper.Website.Controllers
             model.TotalPages = model.Games.PageCount;
             model.Sort = sort;
             model.Desc = desc;
+            model.Search = search;
 
             return View(model);
         }

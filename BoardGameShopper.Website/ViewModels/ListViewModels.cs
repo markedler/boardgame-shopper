@@ -24,6 +24,8 @@ namespace BoardGameShopper.Website.ViewModels
 
             public bool Desc { get; set; }
 
+            public string Search { get; set; }
+
             public class GameItem
             {
                 public Guid Id { get; set; }
