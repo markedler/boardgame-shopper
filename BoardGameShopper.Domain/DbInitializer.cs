@@ -23,38 +23,29 @@ namespace BoardGameShopper.Domain
             context.Sites.RemoveRange(context.Sites);
             context.SaveChanges();
 
+            var dungeonCrawl = new Site { Id = Guid.NewGuid(), UniqueCode = SiteCode.DungeonCrawl, Name = "Dungeon Crawl", Url = "https://www.dungeoncrawl.com.au" };
             var gameology = new Site { Id = Guid.NewGuid(), UniqueCode = SiteCode.Gameology, Name = "Gameology", Url = "https://www.gameology.com.au" };
             var adventGames = new Site { Id = Guid.NewGuid(), UniqueCode = SiteCode.AdventGames, Name = "Advent Games", Url = "https://www.adventgames.com.au" };
             var boardGameMaster = new Site { Id = Guid.NewGuid(), UniqueCode = SiteCode.BoardGameMaster, Name = "Board Game Master", Url = "https://www.boardgamemaster.com.au" };
+            var milsims = new Site { Id = Guid.NewGuid(), UniqueCode = SiteCode.MilSims, Name = "Milsims", Url = "https://www.milsims.com.au" };
+            var gamerholic = new Site { Id = Guid.NewGuid(), UniqueCode = SiteCode.Gamerholic, Name = "Gamerholic", Url = "http://www.ebaystores.com.au/Collectables-Australia" };
+            var oneFourThreeGames = new Site { Id = Guid.NewGuid(), UniqueCode = SiteCode.OneFourThreeGames, Name = "143 Games", Url = "http://www.143games.com.au" };
+            var guf = new Site { Id = Guid.NewGuid(), UniqueCode = SiteCode.Guf, Name = "Guf", Url = "https://guf.com.au" };
 
             var sites = new Site[]
             {
+                guf,
+                dungeonCrawl,
+                oneFourThreeGames,
                 gameology,
                 adventGames,
-                boardGameMaster
+                boardGameMaster,
+                milsims,
+                gamerholic
             };
 
             context.Sites.AddRange(sites);
             context.SaveChanges();
-
-            //ISiteCrawler crawler;
-            //List<Game> games;
-            //Gameology sample
-            //crawler = new GameologyCrawler(gameology);
-            //games = crawler.GetGames(1);
-            //context.Games.AddRange(games);
-
-            ////Advent Games sample
-            //crawler = new AdventGamesCrawler(adventGames);
-            //games = crawler.GetGames(1);
-            //context.Games.AddRange(games);
-
-            //Board Game Master sample
-            //crawler = new BoardGameMasterCrawler(context);
-            //games = crawler.GetGames();
-            //context.Games.AddRange(games);
-
-            //context.SaveChanges();
         }
     }
 }

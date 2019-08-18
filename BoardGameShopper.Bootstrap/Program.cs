@@ -19,7 +19,7 @@ namespace BoardGameShopper.Bootstrap
     {
         public static ServiceProvider serviceProvider;
 
-        private const int NumPages = 5;
+        private static readonly int? NumPages = null;
         private const bool Trace = true;
 
         public class Options {
@@ -29,7 +29,7 @@ namespace BoardGameShopper.Bootstrap
 
         public static void Main(string[] args)
         {
-            var clean = false;
+            var clean = true;
             //Parser.Default.ParseArguments<Options>(args).WithParsed<Options>(o => {
             //    clean = o.Clean;
             //});
@@ -49,17 +49,29 @@ namespace BoardGameShopper.Bootstrap
             using (var dataContext = new DataContext(optionsBuilder.Options))
             {
                 if (clean) {
-                    Console.WriteLine("Clearing existing games from database...");
-                    dataContext.Games.RemoveRange(dataContext.Games);
-                    dataContext.SaveChanges();
+                    Console.WriteLine("Deleting database...");
+                    dataContext.Database.EnsureDeleted();
+                    Console.WriteLine("Creating database...");
+                    DbInitializer.Initialize(dataContext);
                 }
 
-                var games = new GameologyCrawler(dataContext).GetGames(NumPages, Trace);
-                InsertGames(games, dataContext);
-                games = new AdventGamesCrawler(dataContext).GetGames(NumPages, Trace);
-                InsertGames(games, dataContext);
-                //games = new BoardGameMasterCrawler(dataContext).GetGames(NumPages, Trace);
-                //InsertGames(games, dataContext);
+                var crawlers = new List<ISiteCrawler>
+                {
+                    new GufCrawler(dataContext),
+                    new DungeonCrawlCrawler(dataContext),
+                    new OneFourThreeGamesCrawler(dataContext),
+                    new GamerholicCrawler(dataContext),
+                    new MilSimsCrawler(dataContext),
+                    new GameologyCrawler(dataContext),
+                    new AdventGamesCrawler(dataContext),
+                    new BoardGameMasterCrawler(dataContext)
+                };
+
+                foreach (var crawler in crawlers)
+                {
+                    var games = crawler.GetGames(NumPages, Trace);
+                    InsertGames(games, dataContext);
+                }
 
                 watch.Stop();
                 var elapsedMs = watch.ElapsedMilliseconds;

@@ -14,6 +14,12 @@ namespace BoardGameShopper.Domain.Crawlers
     public class BoardGameMasterCrawler : ISiteCrawler
     {
         private DataContext _dataContext;
+
+        public Dictionary<string, string> BaseUrls => new Dictionary<string, string>
+        {
+            ["Board Games"] = "https://app.globosoftware.net/filter/filter?shop=boardgame-master.myshopify.com&sort_by=title-ascending&event=all&page={0}"
+        };
+
         public BoardGameMasterCrawler(DataContext dataContext)
         {
             _dataContext = dataContext;
@@ -26,43 +32,51 @@ namespace BoardGameShopper.Domain.Crawlers
             var site = _dataContext.Sites.SingleOrDefault(x => x.UniqueCode == SiteCode.BoardGameMaster);
 
             var games = new List<Game>();
-            var baseUrl = "https://app.globosoftware.net/filter/filter?shop=boardgame-master.myshopify.com&sort_by=title-ascending&event=all&page={0}";
+            var baseGameUrl = "https://boardgamemaster.com.au/products/";
 
             var client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Add("User-Agent",
                 "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.95 Safari/537.36");
-
-            for (var i = 1; i <= pages; i++)
+            foreach (var baseUrl in BaseUrls)
             {
-                var url = string.Format(baseUrl, i);
-                var result = client.GetStringAsync(url).Result;
-
-                dynamic json = JValue.Parse(result);
-
-                if (json != null && json.products != null && json.products.Count > 0)
+                for (var i = 1; i <= pages; i++)
                 {
-                    foreach (var product in json.products)
+                    if (trace)
+                        Console.Write($"Querying page {i} for {site.Name} ({baseUrl.Key})...");
+                    var url = string.Format(baseUrl.Value, i);
+                    var result = client.GetStringAsync(url).Result;
+
+                    dynamic json = JValue.Parse(result);
+
+                    if (json != null && json.products != null && json.products.Count > 0)
                     {
-                        double.TryParse(product.price?.ToString(), out double currentPrice);
-
-                        if (!double.TryParse(product.compare_at_price?.ToString(), out double previousPrice))
-                            previousPrice = currentPrice;
-
-                        var game = new Game
+                        foreach (var product in json.products)
                         {
-                            Id = Guid.NewGuid(),
-                            SiteId = site.Id,
-                            Name = product.title,
-                            CurrentPrice = currentPrice,
-                            PreviousPrice = previousPrice,
-                            StockStatus = product.available == "1" ? Constants.StockStatus.InStock : Constants.StockStatus.OutOfStock
-                        };
-                        games.Add(game);
+                            double.TryParse(product.price?.ToString(), out double currentPrice);
+
+                            if (!double.TryParse(product.compare_at_price?.ToString(), out double previousPrice))
+                                previousPrice = currentPrice;
+
+                            var game = new Game
+                            {
+                                Id = Guid.NewGuid(),
+                                SiteId = site.Id,
+                                Name = product.title,
+                                CurrentPrice = currentPrice,
+                                PreviousPrice = previousPrice,
+                                Url = $"{baseGameUrl}/{product.handle}",
+                                Image = product.featured_image,
+                                StockStatus = product.available == "1" ? Constants.StockStatus.InStock : Constants.StockStatus.OutOfStock
+                            };
+                            games.Add(game);
+                        }
+                        if (trace)
+                            Console.WriteLine("Done!");
                     }
+                    else
+                        break;
                 }
-                else
-                    break;
             }
 
             return games;
