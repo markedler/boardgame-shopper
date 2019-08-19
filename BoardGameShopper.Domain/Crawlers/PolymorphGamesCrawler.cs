@@ -33,7 +33,7 @@ namespace BoardGameShopper.Domain.Crawlers
         {
             var name = gameNode.QuerySelector(".caption>h4>a")?.InnerText?.Trim();
             var priceNode = gameNode.QuerySelector(".price");
-            var price = ConvertPrice(_priceRegex.Replace(priceNode?.InnerText ?? string.Empty, string.Empty));
+            var price = ConvertPrice(_priceRegex.Replace(priceNode?.FirstChild?.InnerText ?? string.Empty, string.Empty));
             var imageNode = gameNode?.QuerySelector(".image>a>img");
             var image = imageNode?.Attributes["src"]?.Value;
             var urlNode = gameNode?.QuerySelector(".image>a");

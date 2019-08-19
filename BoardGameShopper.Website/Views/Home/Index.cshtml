@@ -24,17 +24,25 @@
 
 <div class="row">
     <div class="card-group">
-        @foreach (var game in Model.Games)
+     
+            @foreach (var game in Model.Games)
         {
             <div class="col-lg-4 mb-5">
                 <div class="card h-100 text-center">
-                    <div class="card-body">
-                        <img src="@game.Image" alt="@game.Name" style="height: 150px">
-                    </div>
-                    <div class="card-footer">
-                        <h5 class="card-title">@game.Name</h5>
-                        <p></p>
-                    </div>
+                    <a href="@game.Url" target="_blank" class="text-decoration-none">
+                        <div class="clearfix p-2">
+                            <span class="float-right small">@game.SiteName</span>
+                        </div>
+                        <div class="card-body clearfix">
+                            <p>
+                                <img src="@game.Image" alt="@game.Name" style="height: 150px">
+                            </p>
+                            <h4>@string.Format("{0:c}",game.Price)</h4>
+                        </div>
+                        <div class="card-footer">
+                            <h5 class="card-title h-100">@game.Name</h5>
+                        </div>
+                    </a>
                 </div>
             </div>
         }

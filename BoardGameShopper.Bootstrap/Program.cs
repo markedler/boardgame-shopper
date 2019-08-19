@@ -60,11 +60,11 @@ namespace BoardGameShopper.Bootstrap
                 {
                     //GetGames(new AmazonCrawler(new DataContext(optionsBuilder.Options))),
                     //GetGames(new PolymorphGamesCrawler(new DataContext(optionsBuilder.Options))),
-                    //GetGames(new GufCrawler(new DataContext(optionsBuilder.Options))),
+                    GetGames(new GufCrawler(new DataContext(optionsBuilder.Options))),
                     //GetGames(new DungeonCrawlCrawler(new DataContext(optionsBuilder.Options))),
                     //GetGames(new OneFourThreeGamesCrawler(new DataContext(optionsBuilder.Options))),
                     //GetGames(new GamerholicCrawler(new DataContext(optionsBuilder.Options))),
-                    GetGames(new MilSimsCrawler(new DataContext(optionsBuilder.Options))),
+                    //GetGames(new MilSimsCrawler(new DataContext(optionsBuilder.Options))),
                     //GetGames(new GameologyCrawler(new DataContext(optionsBuilder.Options))),
                     //GetGames(new AdventGamesCrawler(new DataContext(optionsBuilder.Options))),
                     //GetGames(new BoardGameMasterCrawler(new DataContext(optionsBuilder.Options)))

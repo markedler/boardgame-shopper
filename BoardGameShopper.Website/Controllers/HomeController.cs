@@ -20,13 +20,14 @@ namespace BoardGameShopper.Website.Controllers
         {
             var model = new HomeViewModels.Index
             {
-                Games = dataContext.Games.OrderBy(x => Guid.NewGuid()).Take(20).Select(x => new HomeViewModels.Index.GameItem
+                Games = dataContext.Games.OrderBy(x => Guid.NewGuid()).Take(15).Select(x => new HomeViewModels.Index.GameItem
                 {
                     Id = x.Id,
                     Image = x.Image,
                     Name = x.Name,
                     Price = x.CurrentPrice,
-                    SiteName = x.Site.Name
+                    SiteName = x.Site.Name,
+                    Url = x.Url
                 }),
                 SiteCount = dataContext.Sites.Count(),
                 GameCount = dataContext.Games.Count()

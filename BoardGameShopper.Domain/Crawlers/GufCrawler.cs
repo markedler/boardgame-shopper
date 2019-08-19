@@ -34,7 +34,7 @@ namespace BoardGameShopper.Domain.Crawlers
         public override Game ExtractGameFromNode(HtmlNode gameNode)
         {
             var name = gameNode.QuerySelector("a.title-5")?.InnerText?.Trim();
-            var priceNode = gameNode.QuerySelector(".product-price");
+            var priceNode = gameNode.QuerySelector(".price, .price_sale");
             var price = ConvertPrice(_priceRegex.Replace(priceNode?.InnerText ?? string.Empty, string.Empty));
             var imageNode = gameNode?.QuerySelector("img.img-responsive");
             var image = imageNode?.Attributes["src"]?.Value;
