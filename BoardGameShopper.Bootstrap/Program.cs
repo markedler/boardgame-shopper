@@ -20,7 +20,7 @@ namespace BoardGameShopper.Bootstrap
     {
         public static ServiceProvider serviceProvider;
 
-        private static readonly int? NumPages = 5;
+        private static readonly int? NumPages = null;
         private const bool Trace = true;
 
         public class Options {
@@ -30,7 +30,7 @@ namespace BoardGameShopper.Bootstrap
 
         public static async Task Main(string[] args)
         {
-            var clean = true;
+            var clean = false;
             //Parser.Default.ParseArguments<Options>(args).WithParsed<Options>(o => {
             //    clean = o.Clean;
             //});
@@ -58,16 +58,16 @@ namespace BoardGameShopper.Bootstrap
                 
                 var tasks = new Task[]
                 {
-                    GetGames(new AmazonCrawler(new DataContext(optionsBuilder.Options))),
-                    GetGames(new PolymorphyGamesCrawler(new DataContext(optionsBuilder.Options))),
-                    GetGames(new GufCrawler(new DataContext(optionsBuilder.Options))),
-                    GetGames(new DungeonCrawlCrawler(new DataContext(optionsBuilder.Options))),
-                    GetGames(new OneFourThreeGamesCrawler(new DataContext(optionsBuilder.Options))),
-                    GetGames(new GamerholicCrawler(new DataContext(optionsBuilder.Options))),
+                    //GetGames(new AmazonCrawler(new DataContext(optionsBuilder.Options))),
+                    //GetGames(new PolymorphGamesCrawler(new DataContext(optionsBuilder.Options))),
+                    //GetGames(new GufCrawler(new DataContext(optionsBuilder.Options))),
+                    //GetGames(new DungeonCrawlCrawler(new DataContext(optionsBuilder.Options))),
+                    //GetGames(new OneFourThreeGamesCrawler(new DataContext(optionsBuilder.Options))),
+                    //GetGames(new GamerholicCrawler(new DataContext(optionsBuilder.Options))),
                     GetGames(new MilSimsCrawler(new DataContext(optionsBuilder.Options))),
-                    GetGames(new GameologyCrawler(new DataContext(optionsBuilder.Options))),
-                    GetGames(new AdventGamesCrawler(new DataContext(optionsBuilder.Options))),
-                    GetGames(new BoardGameMasterCrawler(new DataContext(optionsBuilder.Options)))
+                    //GetGames(new GameologyCrawler(new DataContext(optionsBuilder.Options))),
+                    //GetGames(new AdventGamesCrawler(new DataContext(optionsBuilder.Options))),
+                    //GetGames(new BoardGameMasterCrawler(new DataContext(optionsBuilder.Options)))
                 };
 
                 await Task.WhenAll(tasks);

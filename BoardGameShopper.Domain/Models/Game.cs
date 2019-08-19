@@ -6,7 +6,7 @@ using BoardGameShopper.Domain.Constants;
 
 namespace BoardGameShopper.Domain.Models
 {
-    public class Game
+    public class Game : IEquatable<Game>
     {
         public Guid Id { get; set; }
 
@@ -26,5 +26,10 @@ namespace BoardGameShopper.Domain.Models
         public string Image { get; set; }
 
         public string Url { get; set; }
+
+        public bool Equals(Game other)
+        {
+            return other != null && Name == other.Name && CurrentPrice == other.CurrentPrice && other.SiteId == SiteId;
+        }
     }
 }

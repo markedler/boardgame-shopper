@@ -13,6 +13,10 @@ namespace BoardGameShopper.Website.ViewModels
 
             public IEnumerable<GameItem> Games { get; set; }
 
+            public int SiteCount { get; set; }
+
+            public int GameCount { get; set; }
+
             public class GameItem
             {
                 public Guid Id { get; set; }

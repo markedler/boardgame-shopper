@@ -16,8 +16,8 @@ namespace BoardGameShopper.Domain.Crawlers
 
         public override Dictionary<string, string> BaseUrls => new Dictionary<string, string>
         {
-            ["Board Games"] = RootUrl + "boardgames/?pgnum={0}",
-            ["Card Games"] = RootUrl + "card-games/?pgnum={0}"
+            ["Board Games"] = RootUrl + "boardgames/?sortby=name&pgnum={0}",
+            ["Card Games"] = RootUrl + "card-games/?sortby=name&pgnum={0}"
         };
 
         public MilSimsCrawler(DataContext dataContext) : base(dataContext)

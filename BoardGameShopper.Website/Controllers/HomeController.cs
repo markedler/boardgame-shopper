@@ -27,7 +27,9 @@ namespace BoardGameShopper.Website.Controllers
                     Name = x.Name,
                     Price = x.CurrentPrice,
                     SiteName = x.Site.Name
-                })
+                }),
+                SiteCount = dataContext.Sites.Count(),
+                GameCount = dataContext.Games.Count()
             };
 
             return View(model);

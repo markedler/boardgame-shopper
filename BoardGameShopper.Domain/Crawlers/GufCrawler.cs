@@ -14,6 +14,8 @@ namespace BoardGameShopper.Domain.Crawlers
 
         private string RootUrl = "https://guf.com.au/";
 
+        protected override bool AllowsAsync => false;
+
         public override Dictionary<string, string> BaseUrls => new Dictionary<string, string>
         {
             //["All Games"] = RootUrl + "collections/all?page={0}"

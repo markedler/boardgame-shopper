@@ -15,7 +15,7 @@ namespace BoardGameShopper.Domain.Crawlers
         
         public override Dictionary<string, string> BaseUrls => new Dictionary<string, string>
         {
-            ["Board Games"] = "http://www.ebaystores.com.au/Collectables-Australia/_i.html&_pgn={0}"
+            ["Board Games"] = "http://www.ebaystores.com.au/Collectables-Australia/_i.html?rt=nc&_sid=1103520273&_trksid=p4634.c0.m14.l1513&_pgn={0}"
         };
 
         public GamerholicCrawler(DataContext dataContext) : base(dataContext)

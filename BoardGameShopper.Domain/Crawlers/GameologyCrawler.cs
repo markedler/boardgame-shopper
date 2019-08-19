@@ -14,19 +14,21 @@ namespace BoardGameShopper.Domain.Crawlers
 {
     public class GameologyCrawler : SiteCrawlerBase
     {
-        public GameologyCrawler(DataContext dataContext) : base(dataContext)
-        {
-        }
-
         public override string SiteCode => Constants.SiteCode.Gameology;
 
         private string RootUrl = "https://www.gameology.com.au/";
 
+        protected override bool AllowsAsync => false;
+               
         public override Dictionary<string, string> BaseUrls => new Dictionary<string, string>
         {
             ["Board Games"] = RootUrl + "collections/board-game?_=pf&sort=title-ascending&page={0}",
             ["Card Games"] = RootUrl + "collections/living-card-games?_=pf&sort=title-ascending&page={0}",
         };
+
+        public GameologyCrawler(DataContext dataContext) : base(dataContext)
+        {
+        }
 
         public override List<HtmlNode> GetGameNodes(HtmlDocument html)
         {

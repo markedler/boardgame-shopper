@@ -6,9 +6,9 @@
     <div class="jumbotron">
         <h2 class="display-4">Welcome to Board Game Shopper</h2>
         <p class="lead">
-            Do you live in Australia and want to find the best possible for a board game?
+            Do you live in Australia and want to find the best possible for a particular board game?
             <br />
-            Board Game Shopper will search over 20 different sites for you, ensuring you always get the lowest price!
+            Board Game Shopper will search across <strong>@Html.ActionLink(Model.SiteCount.ToString(), "Index", "Store")</strong> different sites for you, ensuring you always get the lowest price on <strong>@Html.ActionLink(Model.GameCount.ToString(), "Index", "List")</strong> games!
         </p>
 
         <form asp-controller="List" asp-action="Index" method="post" class="form-inline justify-content-center">

@@ -9,7 +9,7 @@ using System.Net;
 
 namespace BoardGameShopper.Domain.Crawlers
 {
-    public class PolymorphyGamesCrawler : SiteCrawlerBase
+    public class PolymorphGamesCrawler : SiteCrawlerBase
     {
         public override string SiteCode => Constants.SiteCode.PolymorphGames;
 
@@ -20,7 +20,7 @@ namespace BoardGameShopper.Domain.Crawlers
             ["Board Games"] = RootUrl + "index.php?route=product/category&path=280&page={0}"
         };
 
-        public PolymorphyGamesCrawler(DataContext dataContext) : base(dataContext)
+        public PolymorphGamesCrawler(DataContext dataContext) : base(dataContext)
         {
         }
 

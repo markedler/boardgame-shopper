@@ -23,7 +23,12 @@ namespace BoardGameShopper.Domain.Crawlers
         public DataContext DataContext { get; }
 
         protected virtual int StartPage => 1;
-        
+
+        //Some sites will block async calls
+        protected virtual bool AllowsAsync => true;
+
+        private readonly string UserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.95 Safari/537.36";
+
         protected SiteCrawlerBase(DataContext dataContext)
         {
            DataContext = dataContext;
@@ -31,8 +36,7 @@ namespace BoardGameShopper.Domain.Crawlers
             Web = new HtmlWeb
             {
                 OverrideEncoding = Encoding.UTF8,
-                UserAgent =
-                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.95 Safari/537.36"
+                UserAgent = UserAgent
             };
 
             Games = new List<Game>();
@@ -47,18 +51,33 @@ namespace BoardGameShopper.Domain.Crawlers
 
             foreach (var baseUrl in BaseUrls)
             {
+                Game firstGamePreviousPage = null, firstGameCurrentPage = null;
                 for (var i = StartPage; i <= pages; i++)
                 {
                     if (trace)
                         Console.WriteLine($"Querying page {i}/{pages} for {_site.Name} ({baseUrl.Key}).");
                     var url = string.Format(baseUrl.Value, i);
 
-                    var html = await Web.LoadFromWebAsync(url);
+                    HtmlDocument html = null;
+                    //Some sites will block async calls
+                    if (AllowsAsync)
+                        html = await Web.LoadFromWebAsync(url);
+                    else
+                        html = Web.Load(url);
                     html.DisableServerSideCode = true;
                     //run overriden method - get game nodes
                     var gameNodes = GetGameNodes(html);
+
                     if (!gameNodes.Any()) // Nothing! We've probably reached the end
                         break;
+
+                    firstGamePreviousPage = firstGameCurrentPage;
+                    firstGameCurrentPage = ExtractGameFromNode(gameNodes.First());
+
+                    //items repeating means we have most likely reached the end of the list
+                    if (firstGameCurrentPage.Equals(firstGamePreviousPage))
+                        break;
+
                     foreach (var gameNode in gameNodes)
                     {
                         games.Add(ExtractGameFromNode(gameNode));
