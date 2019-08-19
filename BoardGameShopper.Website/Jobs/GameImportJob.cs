@@ -39,7 +39,7 @@ namespace BoardGameShopper.Website.Jobs
             if (crawler == null)
                 return;
 
-            var games = crawler.GetGames(maxPages);
+            var games = await crawler.GetGames(maxPages);
 
             await _dataContext.Games.AddRangeAsync(games);
             await _dataContext.SaveChangesAsync();

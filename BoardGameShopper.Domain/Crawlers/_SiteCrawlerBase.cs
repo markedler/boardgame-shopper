@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using BoardGameShopper.Domain.Models;
 using HtmlAgilityPack;
 
@@ -10,20 +11,22 @@ namespace BoardGameShopper.Domain.Crawlers
 {
     public abstract class SiteCrawlerBase : ISiteCrawler
     {
-        private DataContext _dataContext;
-
         private Site _site;
 
         protected Regex _priceRegex = new Regex("[^0-9.]");
-        
+
         public abstract string SiteCode { get; }
         public abstract Dictionary<string, string> BaseUrls { get; }
         protected HtmlWeb Web { get; }
         protected List<Game> Games { get; set; }
+
+        public DataContext DataContext { get; }
+
+        protected virtual int StartPage => 1;
         
         protected SiteCrawlerBase(DataContext dataContext)
         {
-           _dataContext = dataContext;
+           DataContext = dataContext;
 
             Web = new HtmlWeb
             {
@@ -33,10 +36,10 @@ namespace BoardGameShopper.Domain.Crawlers
             };
 
             Games = new List<Game>();
-            _site = _dataContext.Sites.SingleOrDefault(x => x.UniqueCode == SiteCode);
+            _site = DataContext.Sites.SingleOrDefault(x => x.UniqueCode == SiteCode);
         }
         
-        public List<Game> GetGames(int? maxPages = null, bool trace = false)
+        public async Task<List<Game>> GetGames(int? maxPages = null, bool trace = false)
         {
             var pages = maxPages ?? 999;
 
@@ -44,13 +47,13 @@ namespace BoardGameShopper.Domain.Crawlers
 
             foreach (var baseUrl in BaseUrls)
             {
-                for (var i = 1; i <= pages; i++)
+                for (var i = StartPage; i <= pages; i++)
                 {
                     if (trace)
-                        Console.Write($"Querying page {i} for {_site.Name} ({baseUrl.Key})...");
+                        Console.WriteLine($"Querying page {i}/{pages} for {_site.Name} ({baseUrl.Key}).");
                     var url = string.Format(baseUrl.Value, i);
 
-                    var html = Web.Load(url);
+                    var html = await Web.LoadFromWebAsync(url);
                     html.DisableServerSideCode = true;
                     //run overriden method - get game nodes
                     var gameNodes = GetGameNodes(html);
@@ -61,7 +64,7 @@ namespace BoardGameShopper.Domain.Crawlers
                         games.Add(ExtractGameFromNode(gameNode));
                     }
                     if (trace)
-                        Console.WriteLine("Done!");
+                        Console.WriteLine($"Completed page {i}/{pages} for {_site.Name} ({baseUrl.Key}).");
                 }
             }
 

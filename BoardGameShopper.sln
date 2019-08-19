@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoardGameShopper.Bootstrap"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoardGameShopper.Website", "BoardGameShopper.Website\BoardGameShopper.Website.csproj", "{6D0D5BB9-D0D1-4FA9-A98A-A4DAA05A57C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoardGameShopper.Jobs", "BoardGameShopper.Jobs\BoardGameShopper.Jobs.csproj", "{DEA05E04-D7F6-4B16-8700-CBB143D3C930}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoardGameShopper.Jobs", "BoardGameShopper.Jobs\BoardGameShopper.Jobs.csproj", "{DEA05E04-D7F6-4B16-8700-CBB143D3C930}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

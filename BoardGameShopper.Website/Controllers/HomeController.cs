@@ -18,7 +18,19 @@ namespace BoardGameShopper.Website.Controllers
 
         public IActionResult Index()
         {
-            return RedirectToAction("Index", "List");
+            var model = new HomeViewModels.Index
+            {
+                Games = dataContext.Games.OrderBy(x => Guid.NewGuid()).Take(20).Select(x => new HomeViewModels.Index.GameItem
+                {
+                    Id = x.Id,
+                    Image = x.Image,
+                    Name = x.Name,
+                    Price = x.CurrentPrice,
+                    SiteName = x.Site.Name
+                })
+            };
+
+            return View(model);
         }
 
         public IActionResult Privacy()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using BoardGameShopper.Domain.Constants;
 using BoardGameShopper.Domain.Models;
 using Fizzler.Systems.HtmlAgilityPack;
@@ -13,7 +14,7 @@ namespace BoardGameShopper.Domain.Crawlers
 {
     public class BoardGameMasterCrawler : ISiteCrawler
     {
-        private DataContext _dataContext;
+        public DataContext DataContext { get; }
 
         public Dictionary<string, string> BaseUrls => new Dictionary<string, string>
         {
@@ -22,14 +23,14 @@ namespace BoardGameShopper.Domain.Crawlers
 
         public BoardGameMasterCrawler(DataContext dataContext)
         {
-            _dataContext = dataContext;
+            DataContext = dataContext;
         }
 
-        public List<Game> GetGames(int? maxPages = null, bool trace = false)
+        public async Task<List<Game>> GetGames(int? maxPages = null, bool trace = false)
         {
             var pages = maxPages ?? 999;
 
-            var site = _dataContext.Sites.SingleOrDefault(x => x.UniqueCode == SiteCode.BoardGameMaster);
+            var site = DataContext.Sites.SingleOrDefault(x => x.UniqueCode == SiteCode.BoardGameMaster);
 
             var games = new List<Game>();
             var baseGameUrl = "https://boardgamemaster.com.au/products/";
@@ -43,9 +44,9 @@ namespace BoardGameShopper.Domain.Crawlers
                 for (var i = 1; i <= pages; i++)
                 {
                     if (trace)
-                        Console.Write($"Querying page {i} for {site.Name} ({baseUrl.Key})...");
+                        Console.WriteLine($"Querying page {i}/{pages} for {site.Name} ({baseUrl.Key}).");
                     var url = string.Format(baseUrl.Value, i);
-                    var result = client.GetStringAsync(url).Result;
+                    var result = await client.GetStringAsync(url);
 
                     dynamic json = JValue.Parse(result);
 
@@ -72,7 +73,7 @@ namespace BoardGameShopper.Domain.Crawlers
                             games.Add(game);
                         }
                         if (trace)
-                            Console.WriteLine("Done!");
+                            Console.WriteLine($"Completed page {i}/{pages} for {site.Name} ({baseUrl.Key}).");
                     }
                     else
                         break;

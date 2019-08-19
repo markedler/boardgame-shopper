@@ -12,6 +12,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using CommandLine;
+using System.Threading.Tasks;
 
 namespace BoardGameShopper.Bootstrap
 {
@@ -19,7 +20,7 @@ namespace BoardGameShopper.Bootstrap
     {
         public static ServiceProvider serviceProvider;
 
-        private static readonly int? NumPages = null;
+        private static readonly int? NumPages = 5;
         private const bool Trace = true;
 
         public class Options {
@@ -27,7 +28,7 @@ namespace BoardGameShopper.Bootstrap
             public bool Clean {get;set;}
         }
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var clean = true;
             //Parser.Default.ParseArguments<Options>(args).WithParsed<Options>(o => {
@@ -54,24 +55,22 @@ namespace BoardGameShopper.Bootstrap
                     Console.WriteLine("Creating database...");
                     DbInitializer.Initialize(dataContext);
                 }
-
-                var crawlers = new List<ISiteCrawler>
+                
+                var tasks = new Task[]
                 {
-                    new GufCrawler(dataContext),
-                    new DungeonCrawlCrawler(dataContext),
-                    new OneFourThreeGamesCrawler(dataContext),
-                    new GamerholicCrawler(dataContext),
-                    new MilSimsCrawler(dataContext),
-                    new GameologyCrawler(dataContext),
-                    new AdventGamesCrawler(dataContext),
-                    new BoardGameMasterCrawler(dataContext)
+                    GetGames(new AmazonCrawler(new DataContext(optionsBuilder.Options))),
+                    GetGames(new PolymorphyGamesCrawler(new DataContext(optionsBuilder.Options))),
+                    GetGames(new GufCrawler(new DataContext(optionsBuilder.Options))),
+                    GetGames(new DungeonCrawlCrawler(new DataContext(optionsBuilder.Options))),
+                    GetGames(new OneFourThreeGamesCrawler(new DataContext(optionsBuilder.Options))),
+                    GetGames(new GamerholicCrawler(new DataContext(optionsBuilder.Options))),
+                    GetGames(new MilSimsCrawler(new DataContext(optionsBuilder.Options))),
+                    GetGames(new GameologyCrawler(new DataContext(optionsBuilder.Options))),
+                    GetGames(new AdventGamesCrawler(new DataContext(optionsBuilder.Options))),
+                    GetGames(new BoardGameMasterCrawler(new DataContext(optionsBuilder.Options)))
                 };
 
-                foreach (var crawler in crawlers)
-                {
-                    var games = crawler.GetGames(NumPages, Trace);
-                    InsertGames(games, dataContext);
-                }
+                await Task.WhenAll(tasks);
 
                 watch.Stop();
                 var elapsedMs = watch.ElapsedMilliseconds;
@@ -80,10 +79,11 @@ namespace BoardGameShopper.Bootstrap
             }
         }
 
-        private static void InsertGames(IEnumerable<Game> games, DataContext dataContext)
+        private static async Task GetGames(ISiteCrawler crawler)
         {
-            dataContext.Games.AddRange(games);
-            dataContext.SaveChanges();
+            var games = await crawler.GetGames(NumPages, Trace);
+            crawler.DataContext.Games.AddRange(games);
+            await crawler.DataContext.SaveChangesAsync();
         }
     }
 }

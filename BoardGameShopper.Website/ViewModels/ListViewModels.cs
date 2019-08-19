@@ -36,6 +36,8 @@ namespace BoardGameShopper.Website.ViewModels
 
                 public string Store { get; set; }
 
+                public Guid StoreId { get; set; }
+
                 public string Image { get; set; }
 
                 public string Url { get; set; }

@@ -1,10 +1,42 @@
-﻿@Model HomeViewModels.Index
+﻿@model HomeViewModels.Index
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Board Game Shopper";
 }
+    <div class="jumbotron">
+        <h2 class="display-4">Welcome to Board Game Shopper</h2>
+        <p class="lead">
+            Do you live in Australia and want to find the best possible for a board game?
+            <br />
+            Board Game Shopper will search over 20 different sites for you, ensuring you always get the lowest price!
+        </p>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+        <form asp-controller="List" asp-action="Index" method="post" class="form-inline justify-content-center">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    @Html.TextBoxFor(model => model.Search, new { @placeholder = "Search", @class = "form-control form-control-lg", @style="width: 500px" })
+                    <button type="submit" class="btn green">Find It!</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+<div class="row">
+    <div class="card-group">
+        @foreach (var game in Model.Games)
+        {
+            <div class="col-lg-4 mb-5">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <img src="@game.Image" alt="@game.Name" style="height: 150px">
+                    </div>
+                    <div class="card-footer">
+                        <h5 class="card-title">@game.Name</h5>
+                        <p></p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>

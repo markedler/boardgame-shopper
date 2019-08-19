@@ -39,6 +39,7 @@ namespace BoardGameShopper.Website.Controllers
                 Name = x.Name,
                 Price = x.CurrentPrice,
                 Store = x.Site.Name,
+                StoreId = x.SiteId,
                 Image = x.Image,
                 Url = x.Url
             }).AsQueryable();

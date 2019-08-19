@@ -13,6 +13,8 @@ namespace BoardGameShopper.Domain.Constants
         public const string Gamerholic = "GHL";
         public const string OneFourThreeGames = "143";
         public const string DungeonCrawl = "DC";
-        public const string Guf = "Guf";
+        public const string Guf = "GUF";
+        public const string PolymorphGames = "PMG";
+        public const string Amazon = "AMZ";
     }
 }

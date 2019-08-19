@@ -9,11 +9,15 @@ namespace BoardGameShopper.Website.ViewModels
     {
         public class Index
         {
+            public string Search { get; set; }
+
             public IEnumerable<GameItem> Games { get; set; }
 
             public class GameItem
             {
                 public Guid Id { get; set; }
+
+                public string Image { get; set; }
 
                 public string Name { get; set; }
 

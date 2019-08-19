@@ -31,6 +31,8 @@ namespace BoardGameShopper.Domain
             var gamerholic = new Site { Id = Guid.NewGuid(), UniqueCode = SiteCode.Gamerholic, Name = "Gamerholic", Url = "http://www.ebaystores.com.au/Collectables-Australia" };
             var oneFourThreeGames = new Site { Id = Guid.NewGuid(), UniqueCode = SiteCode.OneFourThreeGames, Name = "143 Games", Url = "http://www.143games.com.au" };
             var guf = new Site { Id = Guid.NewGuid(), UniqueCode = SiteCode.Guf, Name = "Guf", Url = "https://guf.com.au" };
+            var polymorphGames = new Site { Id = Guid.NewGuid(), UniqueCode = SiteCode.PolymorphGames, Name = "Polymorph Games", Url = "https://polymorphgames.com.au" };
+            var amazon = new Site { Id = Guid.NewGuid(), UniqueCode = SiteCode.Amazon, Name = "Amazon AU", Url = "https://amazon.com.au" };
 
             var sites = new Site[]
             {
@@ -41,7 +43,9 @@ namespace BoardGameShopper.Domain
                 adventGames,
                 boardGameMaster,
                 milsims,
-                gamerholic
+                gamerholic,
+                polymorphGames,
+                amazon
             };
 
             context.Sites.AddRange(sites);

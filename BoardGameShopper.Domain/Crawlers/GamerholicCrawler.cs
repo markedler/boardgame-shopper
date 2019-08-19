@@ -5,6 +5,7 @@ using System.Text;
 using BoardGameShopper.Domain.Models;
 using HtmlAgilityPack;
 using Fizzler.Systems.HtmlAgilityPack;
+using System.Net;
 
 namespace BoardGameShopper.Domain.Crawlers
 {
@@ -14,7 +15,7 @@ namespace BoardGameShopper.Domain.Crawlers
         
         public override Dictionary<string, string> BaseUrls => new Dictionary<string, string>
         {
-            ["Board Games"] = "http://www.ebaystores.com.au/Collectables-Australia/_i.html"
+            ["Board Games"] = "http://www.ebaystores.com.au/Collectables-Australia/_i.html&_pgn={0}"
         };
 
         public GamerholicCrawler(DataContext dataContext) : base(dataContext)
@@ -28,7 +29,7 @@ namespace BoardGameShopper.Domain.Crawlers
 
         public override Game ExtractGameFromNode(HtmlNode gameNode)
         {
-            var name = gameNode.QuerySelector("a[itemprop='name']")?.InnerText?.Trim();
+            var name = WebUtility.HtmlDecode(gameNode.QuerySelector("a[itemprop='name']")?.InnerText?.Trim());
             var priceNode = gameNode.QuerySelector("span[itemprop='price']");
             var price = ConvertPrice(_priceRegex.Replace(priceNode?.InnerText ?? string.Empty, string.Empty));
             var imageNode = gameNode?.QuerySelector("img[itemprop='image']");
