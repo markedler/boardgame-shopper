@@ -19,7 +19,7 @@ namespace BoardGameShopper.Domain.Crawlers
 
         public override Dictionary<string, string> BaseUrls => new Dictionary<string, string>
         {
-            ["Board Games"] = RootUrl + "s?rh=n%3A4852617051%2Cn%3A%214852618051%2Cn%3A5030684051&page={0}&qid=1566186057"
+            ["Board Games"] = RootUrl + "s?rh=n%3A4852617051%2Cn%3A%214852618051%2Cn%3A5030684051&page={0}&qid=1566186057&s=price-asc-rank&ref=sr_st_price-asc-rank"
         };
 
         public AmazonCrawler(DataContext dataContext) : base(dataContext)

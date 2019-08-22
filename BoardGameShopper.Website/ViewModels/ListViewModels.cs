@@ -28,7 +28,7 @@ namespace BoardGameShopper.Website.ViewModels
 
             public class GameItem
             {
-                public Guid Id { get; set; }
+                public int Id { get; set; }
 
                 public string Name { get; set; }
 
@@ -36,7 +36,7 @@ namespace BoardGameShopper.Website.ViewModels
 
                 public string Store { get; set; }
 
-                public Guid StoreId { get; set; }
+                public int StoreId { get; set; }
 
                 public string Image { get; set; }
 

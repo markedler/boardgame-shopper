@@ -30,7 +30,9 @@ namespace BoardGameShopper.Website.Controllers
 
             if (search != null)
             {
-                query = query.Where(x => x.Name.Contains(search));
+                var tokens = search.TokenizeString();
+                query = query.Where(x => tokens.All(t => x.Name.Contains(t, StringComparison.OrdinalIgnoreCase)));
+                //query = query.Where(x => x.Name.Contains(search));
             }
 
             var games = query.Select(x => new ListViewModels.Index.GameItem
@@ -79,5 +81,10 @@ namespace BoardGameShopper.Website.Controllers
             return View(model);
         }
 
+        [HttpPost, ActionName(nameof(Index))]
+        public ActionResult IndexPost(string search)
+        {
+            return RedirectToAction("Index", new { search = search });
+        }
     }
 }

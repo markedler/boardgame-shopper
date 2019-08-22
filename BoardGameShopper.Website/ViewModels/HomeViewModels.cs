@@ -19,7 +19,7 @@ namespace BoardGameShopper.Website.ViewModels
 
             public class GameItem
             {
-                public Guid Id { get; set; }
+                public int Id { get; set; }
 
                 public string Image { get; set; }
 

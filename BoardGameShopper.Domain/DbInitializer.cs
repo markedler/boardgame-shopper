@@ -23,16 +23,16 @@ namespace BoardGameShopper.Domain
             context.Sites.RemoveRange(context.Sites);
             context.SaveChanges();
 
-            var dungeonCrawl = new Site { Id = Guid.NewGuid(), UniqueCode = SiteCode.DungeonCrawl, Name = "Dungeon Crawl", Url = "https://www.dungeoncrawl.com.au" };
-            var gameology = new Site { Id = Guid.NewGuid(), UniqueCode = SiteCode.Gameology, Name = "Gameology", Url = "https://www.gameology.com.au" };
-            var adventGames = new Site { Id = Guid.NewGuid(), UniqueCode = SiteCode.AdventGames, Name = "Advent Games", Url = "https://www.adventgames.com.au" };
-            var boardGameMaster = new Site { Id = Guid.NewGuid(), UniqueCode = SiteCode.BoardGameMaster, Name = "Board Game Master", Url = "https://www.boardgamemaster.com.au" };
-            var milsims = new Site { Id = Guid.NewGuid(), UniqueCode = SiteCode.MilSims, Name = "Milsims", Url = "https://www.milsims.com.au" };
-            var gamerholic = new Site { Id = Guid.NewGuid(), UniqueCode = SiteCode.Gamerholic, Name = "Gamerholic", Url = "http://www.ebaystores.com.au/Collectables-Australia" };
-            var oneFourThreeGames = new Site { Id = Guid.NewGuid(), UniqueCode = SiteCode.OneFourThreeGames, Name = "143 Games", Url = "http://www.143games.com.au" };
-            var guf = new Site { Id = Guid.NewGuid(), UniqueCode = SiteCode.Guf, Name = "Guf", Url = "https://guf.com.au" };
-            var polymorphGames = new Site { Id = Guid.NewGuid(), UniqueCode = SiteCode.PolymorphGames, Name = "Polymorph Games", Url = "https://polymorphgames.com.au" };
-            var amazon = new Site { Id = Guid.NewGuid(), UniqueCode = SiteCode.Amazon, Name = "Amazon AU", Url = "https://amazon.com.au" };
+            var dungeonCrawl = new Site { UniqueCode = SiteCode.DungeonCrawl, Name = "Dungeon Crawl", Url = "https://www.dungeoncrawl.com.au" };
+            var gameology = new Site { UniqueCode = SiteCode.Gameology, Name = "Gameology", Url = "https://www.gameology.com.au" };
+            var adventGames = new Site { UniqueCode = SiteCode.AdventGames, Name = "Advent Games", Url = "https://www.adventgames.com.au" };
+            var boardGameMaster = new Site { UniqueCode = SiteCode.BoardGameMaster, Name = "Board Game Master", Url = "https://www.boardgamemaster.com.au" };
+            var milsims = new Site { UniqueCode = SiteCode.MilSims, Name = "Milsims", Url = "https://www.milsims.com.au" };
+            var gamerholic = new Site { UniqueCode = SiteCode.Gamerholic, Name = "Gamerholic", Url = "http://www.ebaystores.com.au/Collectables-Australia" };
+            var oneFourThreeGames = new Site { UniqueCode = SiteCode.OneFourThreeGames, Name = "143 Games", Url = "http://www.143games.com.au" };
+            var guf = new Site { UniqueCode = SiteCode.Guf, Name = "Guf", Url = "https://guf.com.au" };
+            var polymorphGames = new Site { UniqueCode = SiteCode.PolymorphGames, Name = "Polymorph Games", Url = "https://polymorphgames.com.au" };
+            var amazon = new Site { UniqueCode = SiteCode.Amazon, Name = "Amazon AU", Url = "https://amazon.com.au" };
 
             var sites = new Site[]
             {

@@ -61,7 +61,6 @@ namespace BoardGameShopper.Domain.Crawlers
 
                             var game = new Game
                             {
-                                Id = Guid.NewGuid(),
                                 SiteId = site.Id,
                                 Name = product.title,
                                 CurrentPrice = currentPrice,

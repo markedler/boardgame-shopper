@@ -20,9 +20,4 @@
     <ProjectReference Include="..\BoardGameShopper.Domain\BoardGameShopper.Domain.csproj" />
   </ItemGroup>
 
-
-  <ItemGroup>
-    <Folder Include="App\" />
-  </ItemGroup>
-
 </Project>

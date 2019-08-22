@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using BoardGameShopper.Domain.Constants;
@@ -8,7 +9,7 @@ namespace BoardGameShopper.Domain.Models
 {
     public class Game : IEquatable<Game>
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         public string Name { get; set; }
 
@@ -18,7 +19,7 @@ namespace BoardGameShopper.Domain.Models
 
         public StockStatus StockStatus { get; set; }
 
-        public Guid SiteId { get; set; }
+        public int SiteId { get; set; }
 
         [ForeignKey(nameof(SiteId))]
         public Site Site { get; set; }
